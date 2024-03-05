@@ -1,19 +1,21 @@
 /* CSS to style the active navbar item */
 .navbar-nav .nav-item.active .nav-link {
     font-weight: bold;
-    color: darksalmon !important;
+    /* color: darksalmon !important; */
+    background-color: lightgray;
     /* Change the text color of active item */
 }
 
 /* Change the link color on hover */
 .navbar-nav .nav-item .nav-link:hover {
-    color: salmon !important;
+    /* color: salmon !important; */
+    background-color: gray;
     /* Change color on hover */
 }
 
 body {
     background-color: white;
-    color: blue !important;
+    color: black;
     /* Optionally, change text color to white for better visibility */
 }
 
