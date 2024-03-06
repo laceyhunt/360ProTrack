@@ -24,12 +24,12 @@
                 <div class="container-fluid">
                     <div class="row" style="height: 100px;">
                         <div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#myModal">
-                            <div class="card bg-primary text-white">
+                            <div class="card text-black" style="background-color: skyblue;">
                                 <div class="card-body">CS 360</div>
                             </div>
                         </div>
                         <div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#myModal">
-                            <div class="card bg-primary text-white">
+                            <div class="card text-black" style="background-color: skyblue;">
                                 <div class="card-body">CS 383</div>
                             </div>
                         </div>
@@ -43,13 +43,16 @@
 
                             <!-- Modal Header -->
                             <div class="modal-header">
-                                <h4 class="modal-title">Course Modal</h4>
+                                <h4 class="modal-title" id="modalTitle">Course Name</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
                             <!-- Modal body -->
                             <div class="modal-body">
-                                This is where we can link to project info?
+                                Project #6: iHome
+                                <div class="card text-success">
+                                    <div class="card-body">View Project</div>
+                                </div>
                             </div>
 
                             <!-- Modal footer -->
@@ -62,7 +65,7 @@
             </div>
             <div class="col-md-4">
                 <!-- A grey vertical navbar on the right side (1/5) -->
-                <nav class="navbar bg-white navbar-expand-md flex-md-column" style="height: 100%;">
+                <nav class="navbar navbar-expand-md flex-md-column" style="height: 100%; background-color: lightskyblue;">
                     <h1 style="color:black">
                         Instructor ProTrack
                     </h1>
@@ -81,6 +84,13 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function setModalTitle(title) {
+            document.getElementById("modalTitle").innerText = title;
+        }
+    </script>
+
 </body>
 
 </html>
