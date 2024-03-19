@@ -35,7 +35,7 @@
 					  <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
 					  </div>";
 			}
-		}else if ($type==2){
+		}else if ($type==0){
 			$query    = "SELECT * FROM `users` WHERE email='$email'
 					 AND type='$type'
                      AND password='" . md5($password) . "'";
@@ -44,7 +44,7 @@
 			if ($rows == 1) {
 				$_SESSION['email'] = $email;
 				// Redirect to user dashboard page
-				header("Location: ../latter/student/student_home.html");
+				header("Location: ../latter/student/student_home.php");
 			} else {
 				echo "<div class='form'>
 					  <h3>Incorrect Email/password.</h3><br/>
@@ -71,7 +71,7 @@
 												<input type="text" class="login-input" name="email" placeholder="Email" autofocus="true"/><br><br>
 												<input type="password" class="login-input" name="password" placeholder="Password"/><br><br>
 												<input type="radio" class="login-input" name="usertype" value="1" required>Instructor
-												<input type="radio" class="login-input" name="usertype" value="2" required>Student<br><br>
+												<input type="radio" class="login-input" name="usertype" value="0" required>Student<br><br>
 												<input type="submit" value="Login" name="submit" class="login-button"/>
 											</form>
                                         </div>

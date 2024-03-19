@@ -58,7 +58,7 @@
 												<input type="text" class="login-input" name="email" placeholder="Email" required /><br><br>
 												<input type="password" class="login-input" name="password" placeholder="Password"><br><br>
 												<input type="radio" class="login-input" name="usertype" value="1" required>Instructor
-												<input type="radio" class="login-input" name="usertype" value="2" required>Student<br><br>
+												<input type="radio" class="login-input" name="usertype" value="0" required>Student<br><br>
 												<input type="submit" name="submit" value="Register" class="login-button">
 											 </form>
                                         </div>

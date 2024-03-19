@@ -5,6 +5,7 @@ $servername = "localhost";
 $username = "root"; //$_SESSION['email'];
 $password = "";	//not sure what to put here
 $dbname = "protrack_db";
+$currentUser = $_SESSION['email'];
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 ?>
@@ -12,7 +13,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 <html>
 
 <head>
-    <title>Instructor Home</title>
+    <title>Student Home</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,38 +29,38 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                 <!-- Content for the rest of the page (left 4/5) -->
                 <h2 style="text-align: center;">
                 <br>
-                    Courses
+                    Projects
                 </h2>
                 <!-- Course Cards -->
                 <div class="container-fluid">
 				
                     <div class="row" style="height: 100px;">
 						<?php 
-							$sql = "SELECT courses.course_name FROM courses JOIN instructs JOIN users ON instructs.IID=users.UID AND courses.CID=instructs.CID WHERE users.type='1'";
-							$courses = $conn->query($sql);
+							$sql = "SELECT projects.project_name FROM projects JOIN works_on JOIN users ON works_on.PID=projects.PID AND works_on.SID=users.UID WHERE users.type='0'AND users.email='$currentUser'";
+							$projects = $conn->query($sql);
 								
-							if ($courses->num_rows > 0) {
+							if ($projects->num_rows > 0) {
 								// output data of each row
-								while($courses_row = $courses->fetch_assoc()) {
+								while($projects_row = $projects->fetch_assoc()) {
 									echo '
 						
 								  <div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#course1">
-										<div class="card bg-primary text-white">
-											<div class="card-body">' . $courses_row["course_name"] . '</div>
+										<div class="card bg-success text-white">
+											<div class="card-body">' . $projects_row["project_name"] . '</div>
 										</div>
 									</div>
 									';
 								}
 							  } else {
 								echo '<div class="container mt-3 col-md-4">
-											<div class="card bg-primary text-white">
-												<div class="card-body">No courses</div>
+											<div class="card bg-success text-white">
+												<div class="card-body">No Projects</div>
 											</div>
 										</div>';
 							  }
 							echo '<div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#newcourse">
-									<div class="card bg-primary text-white">
-										<div class="card-body">Add a new course!</div>
+									<div class="card bg-success text-white">
+										<div class="card-body">Add a new project!</div>
 									</div>
 								</div>';
 						?>
@@ -77,7 +78,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
                             <!-- Modal Header -->
                             <div class="modal-header">
-                                <h4 class="modal-title">Please enter the course info:</h4>
+                                <h4 class="modal-title">Please enter the project info:</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
@@ -86,36 +87,36 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 							<?php 
 								
 								
-								if (isset($_POST['course_name'])) {
-									$course_name = stripslashes($_REQUEST['course_name']);    // removes backslashes
-									$course_name = mysqli_real_escape_string($con, $course_name);
+								if (isset($_POST['project_name'])) {
+									$project_name = stripslashes($_REQUEST['project_name']);    // removes backslashes
+									$project_name = mysqli_real_escape_string($con, $project_name);
 									$email=$_SESSION['email'];
-									$IID_query = "SELECT UID FROM `users` WHERE email='$email'";
-									$IID = $conn->query($IID_query);
-									$IID_row=$IID->fetch_assoc();
-									$check_query    = "SELECT * FROM `courses` WHERE course_name='$course_name' AND IID=$IID_row[UID]";
+									$SID_query = "SELECT UID FROM `users` WHERE email='$email'";
+									$SID = $conn->query($SID_query);
+									$SID_row=$SID->fetch_assoc();
+									$check_query    = "SELECT projects.project_name FROM `projects` JOIN `works_on` JOIN `users` ON works_on.SID=users.UID AND projects.PID=works_on.PID WHERE users.type='0' AND users.email='$currentUser' AND projects.project_name='$project_name'";
 									   $check_result = mysqli_query($con, $check_query) or die(mysql_error());
 									   $check_rows = mysqli_num_rows($check_result);
 									if ($check_rows == 0) {
-										$courses_query    = "INSERT into `courses` (course_name,IID)
-															VALUES ('$course_name',$IID_row[UID])";
-										$courses_result   = mysqli_query($con, $courses_query);
-										$CID_query    = "SELECT CID FROM `courses` WHERE course_name='$course_name' AND courses.IID='$IID_row[UID]'";
-										$CID = $conn->query($CID_query) or die(mysql_error());
-										$CID_row=$CID->fetch_assoc();
-										$instructs_query = "INSERT into `instructs` (IID,CID)
-															VALUES ('$IID_row[UID]',$CID_row[CID])";
-										$instructs_result = mysqli_query($con, $instructs_query);
-										header("Location: instructor_home.php");
+										$projects_query    = "INSERT into `projects` (project_name)
+															VALUES ('$project_name')";
+										$projects_result   = mysqli_query($con, $projects_query);
+										$PID_query    = "SELECT PID FROM `projects` WHERE project_name='$project_name'";
+										$PID = $conn->query($PID_query) or die(mysql_error());
+										$PID_row=$PID->fetch_assoc();
+										$workson_query = "INSERT into `works_on` (SID,PID)
+															VALUES ('$SID_row[UID]',$PID_row[PID])";
+										$workson_result = mysqli_query($con, $workson_query);
+										header("Location: student_home.php");
 									}else{
-										echo '<div>There is already a course with this name!</div>';
+										echo '<div>There is already a project with this name!</div>';
 									}
 									
 								}else{
 									?>
 									 <div class="modal-body">
 										<form class="form" action="" method="post">
-												<input type="text" class="login-input" name="course_name" placeholder="Course name" required /><br><br>
+												<input type="text" class="login-input" name="project_name" placeholder="Project name" required /><br><br>
 												<input type="submit" name="submit" value="Register" class="login-button">
 											 </form>
 									</div>
@@ -155,17 +156,17 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 //									}
 //								?><br><br>
                                 <?php 
-									$sql = "SELECT PID, IID, CID FROM projects WHERE CID='383' ORDER BY PID";
-									$result = $conn->query($sql);
+								// 	$sql = "SELECT PID, IID, CID FROM projects WHERE CID='383' ORDER BY PID";
+								// 	$result = $conn->query($sql);
 								
-								if ($result->num_rows > 0) {
-									// output data of each row
-									while($row = $result->fetch_assoc()) {
-									  echo "PID: " . $row["PID"]. " - IID: " . $row["IID"]. " - CID: " . $row["CID"]. "<br>";
-									}
-								  } else {
-									echo "0 results";
-								  }
+								// if ($result->num_rows > 0) {
+								// 	// output data of each row
+								// 	while($row = $result->fetch_assoc()) {
+								// 	  echo "PID: " . $row["PID"]. " - IID: " . $row["IID"]. " - CID: " . $row["CID"]. "<br>";
+								// 	}
+								//   } else {
+								// 	echo "0 results";
+								//   }
 								 ?>
                             </div>
 
@@ -193,16 +194,16 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                 <!-- A grey vertical navbar on the right side (1/5) -->
                 <nav class="navbar bg-white navbar-expand-md flex-md-column" style="height: 100%;">
                     <h1 style="color:black">
-                        Instructor ProTrack
+                        Student ProTrack
                     </h1>
                     <br>
                     <!-- Links -->
                     <ul class="navbar-nav flex-column" id="navbar">
                         <li class="nav-item active">
-                            <a class="nav-link" style="color:black" href="instructor_home.php">HOME</a>
+                            <a class="nav-link" style="color:black" href="student_home.php">HOME</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" style="color:black" href="instructor_contact.html">CONTACT</a>
+                            <a class="nav-link" style="color:black" href="student_contact.html">CONTACT</a>
                         </li>
                         <br>
                     </ul>
