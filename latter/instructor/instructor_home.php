@@ -3,8 +3,8 @@ require('../../Front/db.php');
 include("../../Front/auth_session.php");
 $servername = "localhost";
 $username = "root"; //$_SESSION['email'];
-$password = "root";	//not sure what to put here
-$dbname = "cs360protrack";
+$password = "";	//not sure what to put here
+$dbname = "protrack_db";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 $currentUser=$_SESSION['email'];
