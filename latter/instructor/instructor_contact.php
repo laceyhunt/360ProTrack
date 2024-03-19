@@ -1,3 +1,23 @@
+<?php
+require('../../Front/db.php');
+include("../../Front/auth_session.php");
+$servername = "localhost";
+$username = "root"; //$_SESSION['email'];
+$password = "root";	//not sure what to put here
+$dbname = "cs360protrack";
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+$currentUser=$_SESSION['email'];
+$currentUserQuery = "SELECT * FROM users WHERE email='$currentUser'";
+$currentUserResult=$conn->query($currentUserQuery);
+$currentUserRow=$currentUserResult->fetch_assoc();
+$currentUserType=$currentUserRow['type'];
+$currentUserID=$currentUserRow["UID"];
+if($currentUserType!=1){
+	session_abort();
+	header("Location: ../../Front/login.php");
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -39,6 +59,9 @@
                     <h1 style="color:black">
                         Instructor ProTrack
                     </h1>
+                    <p>
+                        Welcome <?php echo $currentUser?>
+					</p>
                     <br>
                     <!-- Links -->
                     <ul class="navbar-nav flex-column" id="navbar">
@@ -46,7 +69,7 @@
                             <a class="nav-link" style="color:black" href="instructor_home.php">HOME</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" style="color:black" href="instructor_contact.html">CONTACT</a>
+                            <a class="nav-link" style="color:black" href="instructor_contact.php">CONTACT</a>
                         </li>
                         <br>
                     </ul>

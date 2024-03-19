@@ -7,6 +7,16 @@ $password = "root";	//not sure what to put here
 $dbname = "cs360protrack";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
+$currentUser=$_SESSION['email'];
+$currentUserQuery = "SELECT * FROM users WHERE email='$currentUser'";
+$currentUserResult=$conn->query($currentUserQuery);
+$currentUserRow=$currentUserResult->fetch_assoc();
+$currentUserType=$currentUserRow['type'];
+$currentUserID=$currentUserRow["UID"];
+if($currentUserType!=1){
+	session_abort();
+	header("Location: ../../Front/login.php");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,7 +45,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 				
                     <div class="row" style="height: 100px;">
 						<?php 
-							$sql = "SELECT courses.course_name FROM courses JOIN instructs JOIN users ON instructs.IID=users.UID AND courses.CID=instructs.CID WHERE users.type='1'";
+							$sql = "SELECT courses.course_name FROM courses JOIN instructs JOIN users ON instructs.IID=users.UID AND courses.CID=instructs.CID WHERE users.type='1' AND users.email='$currentUser'";
 							$courses = $conn->query($sql);
 								
 							if ($courses->num_rows > 0) {
@@ -137,23 +147,29 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
                             <!-- Modal Header -->
                             <div class="modal-header">
-                                <h4 class="modal-title"></h4>
+                                <h4 class="modal-title">Course info:</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
                             <!-- Modal body -->
                             <div class="modal-body">
-								<a>View/Add/Remove Students</a><br><br>
-								<a>View/Edit Syllabus</a><br><br>
-								<a>View/Edit Feedback</a><br><br>
-								<a>View/Edit Grades</a><br><br>
+								<a href="instructor_students.php">View/Add/Remove Students</a><br><br>
+								<a href="instructor_syllabus.php">View/Edit Syllabus</a><br><br>
+								<a href="instructor_feedback.php">View/Edit Feedback</a><br><br>
+								<a href="instructor_grades.php">View/Edit Grades</a><br><br>
 								<?php
-//									if (isset($_GET[])){
-//										
-//									}else{
-//										echo 'Remove course';
-//									}
-//								?><br><br>
+									if (isset($_POST['remove_course'])){
+										$remove_courses_query = "DELETE FROM courses WHERE courses.IID='$currentUserID'";
+										$remove_courses_result = $conn->query($remove_courses_query);
+										$remove_instructs_query = "DELETE FROM instructs WHERE instructs.IID='$currentUserID'";
+										$remove_instructs_result = $conn->query($remove_instructs_query);
+										header("Location: instructor_home.php");
+									}else{
+										echo '<form class="form" method="post" name="RemoveCourse">
+												<input type="submit" value="Remove course" name="remove_course" class="login-button"/>
+											</form>';
+									}
+								?><br><br>
                                 <?php 
 									$sql = "SELECT PID, IID, CID FROM projects WHERE CID='383' ORDER BY PID";
 									$result = $conn->query($sql);
@@ -195,6 +211,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                     <h1 style="color:black">
                         Instructor ProTrack
                     </h1>
+					<p>
+						Welcome <?php echo $currentUser?>
+					</p>
                     <br>
                     <!-- Links -->
                     <ul class="navbar-nav flex-column" id="navbar">
@@ -202,7 +221,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                             <a class="nav-link" style="color:black" href="instructor_home.php">HOME</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" style="color:black" href="instructor_contact.html">CONTACT</a>
+                            <a class="nav-link" style="color:black" href="instructor_contact.php">CONTACT</a>
                         </li>
                         <br>
                     </ul>
