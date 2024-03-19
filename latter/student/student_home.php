@@ -6,6 +6,7 @@ $username = "root"; //$_SESSION['email'];
 $password = "";	//not sure what to put here
 $dbname = "protrack_db";
 $currentUser = $_SESSION['email'];
+require_once 'getProjectName.php';
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 ?>
@@ -19,6 +20,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- Add jQuery library -->
     <link rel='stylesheet' href='../../nav.css'>
 </head>
 
@@ -44,11 +46,12 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 								while($projects_row = $projects->fetch_assoc()) {
 									echo '
 						
-								  <div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#course1">
+								  <div class="container mt-3 col-md-4 project-card" type="button" data-bs-toggle="modal" data-bs-target="#course1" data-project-name="' . $projects_row["project_name"] . '" >
 										<div class="card bg-success text-white">
 											<div class="card-body">' . $projects_row["project_name"] . '</div>
 										</div>
 									</div>
+                                    
 									';
 								}
 							  } else {
@@ -65,6 +68,48 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 								</div>';
 						?>
                         
+                        <!-- $projectName = isset($_SESSION['projectName']) ? $_SESSION['projectName'] : "Default Project Name"; -->
+                        <script>
+                            $(document).ready(function() {
+                                // Attach click event listener to project cards
+                                $('.project-card').click(function() {
+                                    // Get project name from data attribute
+                                    var projectName = $(this).data('project-name');
+                                    
+                                    // Send project name to the same PHP script using AJAX
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: 'student_home.php', // PHP script to handle updating the session variable
+                                        data: { projectName: projectName },
+                                        success: function(response) {
+                                            console.log('Project Name Updated:', projectName);
+                                            // Optionally, you can reload the page or update the UI here
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error('Error:', error);
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+
+                        <?php 
+                        if (session_status() == PHP_SESSION_NONE) {
+                            session_start();
+                        }
+
+                        // Check if projectName is set in $_POST
+                        if(isset($_POST['projectName'])) {
+                            // Get the project name from $_POST
+                            $_SESSION['projectName'] = $_POST['projectName'];
+                            // Send a success response back to the client
+                            echo 'Project name updated successfully.';
+                        } else {
+                            // Send an error response back to the client
+                            http_response_code(400); // Bad Request
+                            echo 'Error: Project name not provided.';
+                        }
+                        ?>
                         
                     </div>
 
@@ -138,13 +183,42 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
                             <!-- Modal Header -->
                             <div class="modal-header">
-                                <h4 class="modal-title"></h4>
+                                <h4 class="modal-title"><?php echo $projectName; ?></h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
                             <!-- Modal body -->
                             <div class="modal-body">
-								<a>View/Add/Remove Students</a><br><br>
+                            
+                                <p>Project Name: <?php echo $projectName; ?></p>
+								<a>Collaborators:</a><br><br>
+                                <?php
+                                    // $projectName = $_POST['projectName'];
+                                    // echo''.$projectName.'';
+                                    // $sql = "SELECT users.first_name FROM users JOIN works_on JOIN projects ON works_on.PID=projects.PID AND works_on.SID=users.UID WHERE users.type='0' AND projects.project_name='$projectName";
+							        // $collab = $conn->query($sql);
+                                    // if ($collab->num_rows > 0) {
+                                    //     // output data of each row
+                                    //     while($students_row = $collab->fetch_assoc()) {
+                                    //     //     echo '
+                                
+                                    //     //   <div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#course1">
+                                    //     //         <div class="card bg-success text-white">
+                                    //     //             <div class="card-body">' . $projects_row["project_name"] . '</div>
+                                    //     //         </div>
+                                    //     //     </div>
+                                    //     //     ';
+                                    //     echo '<p class="text-black">' . $students_row["first_name"] . '</p>';
+                                    //     }
+                                    //   } else {
+                                    //     // echo '<div class="container mt-3 col-md-4">
+                                    //     //             <div class="card bg-success text-white">
+                                    //     //                 <div class="card-body">No Projects</div>
+                                    //     //             </div>
+                                    //     //         </div>';
+                                    //     echo '<p class="text-black"> No collaborators. </p>';
+                                    //   }
+                                ?>
 								<a>View/Edit Syllabus</a><br><br>
 								<a>View/Edit Feedback</a><br><br>
 								<a>View/Edit Grades</a><br><br>
@@ -180,9 +254,6 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 				
 				
             </div>
-			
-			
-			
 			
 			
 			
