@@ -11,7 +11,7 @@
 		<div class="row">
 			<div class="row">
 				<p style="text-align: right; padding-top: 10px">
-					<a href="login.html" style="padding-right: 25px; text-decoration: none; color: black;">
+					<a href="login.php" style="padding-right: 25px; text-decoration: none; color: black;">
 						Log in
 					</a>
 					<a href="#Register" style="text-decoration: none; color: black;">
@@ -49,25 +49,12 @@
 				<div class="col-md-2"></div>
 			</div>
 			<div class="row" style="text-align: center; padding: 100px">
-				<h2 style="text-align: center;" id="Register">
-					Register now!
-				</h2>
-			</div>
-			<div class="row" style="text-align: center; padding: 100px">
-				<div class="col-md-2">
-					
+				<div class="col-md-4">
 				</div>
-				<div class="col-md-3" style="background-color: darkseagreen; text-align: center; padding: 50px; text-decoration: none; color: black;">
-					<a href="student_registration.php"><h2>Student</h2></a>
+				<div class="col-md-4" style="background-color: darkseagreen; text-align: center; padding: 50px; text-decoration: none; color: black;" id="Register">
+					<a href="registration.php"><h2>Register now!</h2></a>
 				</div>
-				<div class="col-md-2">
-					
-				</div>
-				<div class="col-md-3" style="background-color: lightskyblue; text-align: center; padding: 50px; text-decoration: none; color: black;">
-					<a href="instructor_registration.php"><h2>Instructor</h2></a>
-				</div>
-				<div class="col-md-2">
-					
+				<div class="col-md-4">
 				</div>
 			</div>
 		</div>
