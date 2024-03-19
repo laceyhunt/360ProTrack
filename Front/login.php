@@ -23,6 +23,7 @@
 			$query    = "SELECT * FROM `users` WHERE email='$email'
 					 AND type='$type'
                      AND password='" . md5($password) . "'";
+<<<<<<< HEAD:Front/login.php
 			$result = mysqli_query($con, $query) or die(mysql_error());
 			$rows = mysqli_num_rows($result);
 			if ($rows == 1) {
@@ -53,6 +54,20 @@
 			}
 		}
         
+=======
+        $result = mysqli_query($con, $query) or die(mysql_error());
+        $rows = mysqli_num_rows($result);
+        if ($rows == 1) {
+            $_SESSION['username'] = $username;
+            // Redirect to user dashboard page
+            header("Location: ../latter/instructor/instructor_home.html");
+        } else {
+            echo "<div class='form'>
+                  <h3>Incorrect Username/password.</h3><br/>
+                  <p class='link'>Click here to <a href='instructor_login.php'>Login</a> again.</p>
+                  </div>";
+        }
+>>>>>>> 35297c37b09cc815592370f3b00aa14a3443354d:Front/instructor_login.php
     } else {
 ?>
 	<div class="row" style="padding=200px">
