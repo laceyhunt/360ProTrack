@@ -1,14 +1,23 @@
 <?php
 require('../../Front/db.php');
 include("../../Front/auth_session.php");
+// include 'update_project_name.php';
 $servername = "localhost";
 $username = "root"; //$_SESSION['email'];
 $password = "";	//not sure what to put here
 $dbname = "protrack_db";
-$currentUser = $_SESSION['email'];
-require_once 'getProjectName.php';
-// Create connection
+// Create connection and verify student
 $conn = new mysqli($servername, $username, $password, $dbname);
+$currentUser=$_SESSION['email'];
+$currentUserQuery = "SELECT * FROM users WHERE email='$currentUser'";
+$currentUserResult=$conn->query($currentUserQuery);
+$currentUserRow=$currentUserResult->fetch_assoc();
+$currentUserType=$currentUserRow['type'];
+$currentUserID=$currentUserRow["UID"];
+if($currentUserType!=0){
+	session_abort();
+	header("Location: ../../Front/login.php");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -68,7 +77,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 								</div>';
 						?>
                         
-                        <!-- $projectName = isset($_SESSION['projectName']) ? $_SESSION['projectName'] : "Default Project Name"; -->
+                        
                         <script>
                             $(document).ready(function() {
                                 // Attach click event listener to project cards
@@ -79,11 +88,12 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                                     // Send project name to the same PHP script using AJAX
                                     $.ajax({
                                         type: 'POST',
-                                        url: 'student_home.php', // PHP script to handle updating the session variable
+                                        url: 'update_project_name.php', // PHP script to handle updating the session variable
                                         data: { projectName: projectName },
                                         success: function(response) {
                                             console.log('Project Name Updated:', projectName);
                                             // Optionally, you can reload the page or update the UI here
+                                            $('#projectName').text(projectName);
                                         },
                                         error: function(xhr, status, error) {
                                             console.error('Error:', error);
@@ -93,24 +103,6 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                             });
                         </script>
 
-                        <?php 
-                        if (session_status() == PHP_SESSION_NONE) {
-                            session_start();
-                        }
-
-                        // Check if projectName is set in $_POST
-                        if(isset($_POST['projectName'])) {
-                            // Get the project name from $_POST
-                            $_SESSION['projectName'] = $_POST['projectName'];
-                            // Send a success response back to the client
-                            echo 'Project name updated successfully.';
-                        } else {
-                            // Send an error response back to the client
-                            http_response_code(400); // Bad Request
-                            echo 'Error: Project name not provided.';
-                        }
-                        ?>
-                        
                     </div>
 
                 </div>
@@ -130,8 +122,6 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                             <!-- Modal body -->
                            
 							<?php 
-								
-								
 								if (isset($_POST['project_name'])) {
 									$project_name = stripslashes($_REQUEST['project_name']);    // removes backslashes
 									$project_name = mysqli_real_escape_string($con, $project_name);
@@ -183,65 +173,51 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
                             <!-- Modal Header -->
                             <div class="modal-header">
-                                <h4 class="modal-title"><?php echo $projectName; ?></h4>
+                                <!-- <h4 class="modal-title" id="projectName"><?php echo $projectName; ?></h4> -->
+                                <h4 class="modal-title">Project Title:&nbsp;</h4>
+                                <h4 class="modal-title" id="projectName">Title</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
+                            <?php
+                                // var_dump($_GET); // Debugging to inspect the contents of $_GET
+                                // $projectName = $_GET['variable_name']; // Access the variable from the URL
+                                // echo $projectName; // Use the variable
+                            ?>
 
                             <!-- Modal body -->
                             <div class="modal-body">
-                            
-                                <p>Project Name: <?php echo $projectName; ?></p>
 								<a>Collaborators:</a><br><br>
                                 <?php
                                     // $projectName = $_POST['projectName'];
                                     // echo''.$projectName.'';
                                     // $sql = "SELECT users.first_name FROM users JOIN works_on JOIN projects ON works_on.PID=projects.PID AND works_on.SID=users.UID WHERE users.type='0' AND projects.project_name='$projectName";
-							        // $collab = $conn->query($sql);
-                                    // if ($collab->num_rows > 0) {
-                                    //     // output data of each row
-                                    //     while($students_row = $collab->fetch_assoc()) {
-                                    //     //     echo '
-                                
-                                    //     //   <div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#course1">
-                                    //     //         <div class="card bg-success text-white">
-                                    //     //             <div class="card-body">' . $projects_row["project_name"] . '</div>
-                                    //     //         </div>
-                                    //     //     </div>
-                                    //     //     ';
-                                    //     echo '<p class="text-black">' . $students_row["first_name"] . '</p>';
-                                    //     }
-                                    //   } else {
-                                    //     // echo '<div class="container mt-3 col-md-4">
-                                    //     //             <div class="card bg-success text-white">
-                                    //     //                 <div class="card-body">No Projects</div>
-                                    //     //             </div>
-                                    //     //         </div>';
-                                    //     echo '<p class="text-black"> No collaborators. </p>';
-                                    //   }
+
+                                    //instructor
+                                    $sql = "SELECT users.first_name, users.last_name FROM users JOIN projects ON projects.IID=users.UID WHERE users.type='1'";
+                                    $collab = $conn->query($sql);
+                                    if ($collab->num_rows > 0) {
+                                        // output data of each row
+                                        while($students_row = $collab->fetch_assoc()) {
+                                        echo '<p class="text-primary">&nbsp;&nbsp;&nbsp;' . $students_row["first_name"] . ' ' . $students_row["last_name"] . '</p>';
+                                        }
+                                    } else {
+                                    echo '<p class="text-primary"> No instructor collaborators. </p>';
+                                    }
+                                    //students
+                                    $sql = "SELECT users.first_name, users.last_name FROM users JOIN works_on JOIN projects ON works_on.PID=projects.PID AND works_on.SID=users.UID WHERE users.type='0'";
+                                    $collab = $conn->query($sql);
+                                    if ($collab->num_rows > 0) {
+                                        // output data of each row
+                                        while($students_row = $collab->fetch_assoc()) {
+                                        echo '<p class="text-success">&nbsp;&nbsp;&nbsp;' . $students_row["first_name"] . ' ' . $students_row["last_name"] . '</p>';
+                                        }
+                                    } else {
+                                    echo '<p class="text-success"> No student collaborators. </p>';
+                                    }
                                 ?>
-								<a>View/Edit Syllabus</a><br><br>
-								<a>View/Edit Feedback</a><br><br>
-								<a>View/Edit Grades</a><br><br>
-								<?php
-//									if (isset($_GET[])){
-//										
-//									}else{
-//										echo 'Remove course';
-//									}
-//								?><br><br>
-                                <?php 
-								// 	$sql = "SELECT PID, IID, CID FROM projects WHERE CID='383' ORDER BY PID";
-								// 	$result = $conn->query($sql);
-								
-								// if ($result->num_rows > 0) {
-								// 	// output data of each row
-								// 	while($row = $result->fetch_assoc()) {
-								// 	  echo "PID: " . $row["PID"]. " - IID: " . $row["IID"]. " - CID: " . $row["CID"]. "<br>";
-								// 	}
-								//   } else {
-								// 	echo "0 results";
-								//   }
-								 ?>
+								<a href="student_plan.php">View/Edit Project Plan</a><br>
+								<a href="student_syllabus.php">View Syllabus</a><br>
+								<a href="student_feedback.php">View Instructor Feedback</a><br>
                             </div>
 
                             <!-- Modal footer -->
@@ -254,11 +230,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 				
 				
             </div>
-			
-			
-			
-			
-			
+
 			
 			<!--SIDE NAVBAR-->
             <div class="col-md-4">
@@ -267,6 +239,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
                     <h1 style="color:black">
                         Student ProTrack
                     </h1>
+                    <p>
+						Welcome <?php echo $currentUser?>
+					</p>
                     <br>
                     <!-- Links -->
                     <ul class="navbar-nav flex-column" id="navbar">
