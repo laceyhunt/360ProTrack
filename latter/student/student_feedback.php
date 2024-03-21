@@ -25,7 +25,7 @@ if($currentUserType!=0){
 <html>
 
 <head>
-    <title>Student Plan</title>
+    <title>Student Feedback</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -40,22 +40,31 @@ if($currentUserType!=0){
         <div class="row">            
             <div class="col-md-8">
                 <!-- Content for the rest of the page (left 4/5) -->
-                <h1 style="text-align: center">
-                    Project Plan
-                </h1>
-                <h2 style="text-align: center">
-                    PERT Chart
-                </h2>
-                <div>
-                    <img id="pert" src="images/pert.jpg" alt="pert" style="width:100%">
-                </div>
-                <h2 style="text-align: center">
-                    GANTT Chart
-                </h2>
-                <div>
-                    <img id="gantt" src="images/gantt.jpg" alt="gantt" style="width:100%">
-                </div>
-                
+                <?php 
+					$c_sql = "SELECT * FROM courses JOIN takes ON courses.CID=takes.CID WHERE takes.SID='$currentUserID'";
+					$c_result=$conn->query($c_sql);
+					if($c_result->num_rows > 0){
+						while($c_row = $c_result->fetch_assoc()){
+							echo "<h2>". $c_row["course_name"] ."</h2><br>";
+							$currentrow=$c_row["course_name"];
+							$sql= "SELECT * FROM projects JOIN courses ON courses.CID=projects.CID JOIN takes ON takes.CID=courses.CID WHERE takes.SID='$currentUserID' AND courses.course_name='$currentrow'";
+							$result=$conn->query($sql);
+							if ($result->num_rows > 0) {
+								// output data of each row
+								while($row = $result->fetch_assoc()) {
+									echo "<li>Project: " . $row["project_name"]. "</li>";
+								}
+							} else{
+								echo "No projects with feedback<br>";
+							}
+							echo '<br>';
+						}
+					}else {
+						echo "0 courses";
+					}
+					
+				?>
+				
             </div>
 			<!--SIDE NAVBAR-->
             <div class="col-md-4">

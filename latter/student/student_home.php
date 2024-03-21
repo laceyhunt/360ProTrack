@@ -245,7 +245,7 @@ if($currentUserType!=0){
                                 ?>
 								<a href="student_plan.html">View/Edit Project Plan</a><br>
 								<a href="student_syllabus.html">View Syllabus</a><br>
-								<a href="student_feedback.html">View Instructor Feedback</a><br>
+								<a href="student_feedback.php">View Instructor Feedback</a><br>
                             </div>
 
                             <!-- Modal footer -->
