@@ -105,7 +105,7 @@ if($currentUserType!=1){
 									$fname=$students_row["first_name"];
 									$lname=$students_row["last_name"];
 									$id=$students_row["UID"];
-									?><option value="<?php$id?>"><a class='dropdown-item' href='#'><?php echo $fname; echo $lname;?></a></option><?php
+									?><option value="<?php $id?>"><a class='dropdown-item' href='#'><?php echo $fname; echo $lname;?></a></option><?php
 								}
 							}
 						?>
