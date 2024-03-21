@@ -84,15 +84,23 @@ if($currentUserType!=0){
                                 $('.project-card').click(function() {
                                     // Get project name from data attribute
                                     var projectName = $(this).data('project-name');
-                                    
+                                    // console.log(window.location.href);
+                                    // var currentUrl = window.location.href;
+                                    // var sendUrl=window.location.href+'/../update_project_name.php';
+                                    // console.log(sendUrl);
                                     // Send project name to the same PHP script using AJAX
                                     $.ajax({
                                         type: 'POST',
-                                        url: 'update_project_name.php', // PHP script to handle updating the session variable
+                                        // url: 'update_project_name.php', // PHP script to handle updating the session variable
+                                        url: sendUrl,
                                         data: { projectName: projectName },
                                         success: function(response) {
                                             console.log('Project Name Updated:', projectName);
                                             // Optionally, you can reload the page or update the UI here
+
+                                            document.cookie="projectName="+$projectName;
+                                            console.log(document.cookie);
+
                                             $('#projectName').text(projectName);
                                         },
                                         error: function(xhr, status, error) {
@@ -101,6 +109,7 @@ if($currentUserType!=0){
                                     });
                                 });
                             });
+
                         </script>
 
                     </div>
@@ -173,9 +182,16 @@ if($currentUserType!=0){
 
                             <!-- Modal Header -->
                             <div class="modal-header">
-                                <!-- <h4 class="modal-title" id="projectName"><?php echo $projectName; ?></h4> -->
-                                <h4 class="modal-title">Project Title:&nbsp;</h4>
-                                <h4 class="modal-title" id="projectName">Title</h4>
+                                <?php
+                                    // accept cookie from browser
+                                    $projectName=$_COOKIE['projectName'];
+                                    // echo $_COOKIE['projectName'];
+                                    // echo $projectName;
+                                ?>
+                                <h4 class="modal-title" ><?php echo $projectName; ?></h4>
+
+                                <!-- <h4 class="modal-title">Project Title:&nbsp;</h4> -->
+                                <!-- <h4 class="modal-title" id="projectName">Title</h4> -->
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <?php
@@ -189,6 +205,16 @@ if($currentUserType!=0){
 								<a>Collaborators:</a><br><br>
                                 <?php
                                     // $projectName = $_POST['projectName'];
+                                    // Get the current URL
+                                    // $currentUrl = "http" . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 's' : '') . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+                                    // echo $currentUrl;
+                                    // echo "____";
+
+                                    // Get the full URL with query parameters
+                                    // $fullUrl = $currentUrl . (empty($_SERVER['QUERY_STRING']) ? '' : '?' . $_SERVER['QUERY_STRING']);
+
+                                    // echo $fullUrl;
                                     // echo''.$projectName.'';
                                     // $sql = "SELECT users.first_name FROM users JOIN works_on JOIN projects ON works_on.PID=projects.PID AND works_on.SID=users.UID WHERE users.type='0' AND projects.project_name='$projectName";
 
@@ -234,8 +260,8 @@ if($currentUserType!=0){
 			
 			<!--SIDE NAVBAR-->
             <div class="col-md-4">
-                <!-- A grey vertical navbar on the right side (1/5) -->
-                <nav class="navbar bg-white navbar-expand-md flex-md-column" style="height: 100%;">
+                <!-- A vertical navbar on the right side (1/5) -->
+                <nav class="navbar navbar-expand-md flex-md-column" style="height: 100%; background-color: darkseagreen;">
                     <h1 style="color:black">
                         Student ProTrack
                     </h1>
@@ -249,7 +275,7 @@ if($currentUserType!=0){
                             <a class="nav-link" style="color:black" href="student_home.php">HOME</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" style="color:black" href="student_contact.html">CONTACT</a>
+                            <a class="nav-link" style="color:black" href="student_contact.php">CONTACT</a>
                         </li>
                         <br>
                     </ul>

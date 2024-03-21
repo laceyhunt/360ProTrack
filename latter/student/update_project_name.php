@@ -2,7 +2,9 @@
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
-
+    echo '<p> This is from the php script </p>';
+    echo '<p> ' .$_POST['projectName'] . ' </p>';
+    // echo '<p class="text-primary"> No instructor collaborators. </p>'
     // Check if projectName is set in $_POST
     if(isset($_POST['projectName'])) {
         // Get the project name from $_POST
