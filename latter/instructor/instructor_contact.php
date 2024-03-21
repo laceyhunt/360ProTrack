@@ -71,6 +71,18 @@ if($currentUserType!=1){
                         <li class="nav-item active">
                             <a class="nav-link" style="color:black" href="instructor_contact.php">CONTACT</a>
                         </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_students.php">STUDENTS</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_syllabus.php">SYLLABUS</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_feedback.php">FEEDBACK</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_grades.php">GRADES</a>
+                        </li>
                         <br>
                     </ul>
                 </nav>

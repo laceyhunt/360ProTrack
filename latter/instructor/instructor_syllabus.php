@@ -36,7 +36,35 @@ if($currentUserType!=1){
         <div class="row">            
             <div class="col-md-8">
                 <!-- Content for the rest of the page (left 4/5) -->
-                Syllabus
+                <?php 
+					$c_sql = "SELECT * FROM courses WHERE courses.IID='$currentUserID'";
+					$c_result=$conn->query($c_sql);
+					if($c_result->num_rows > 0){
+						while($c_row = $c_result->fetch_assoc()){
+							echo "<h2>". $c_row["course_name"] ."</h2><br>";
+							$currentrow=$c_row["course_name"];
+							$sql= "SELECT * FROM projects JOIN courses ON courses.CID=projects.CID WHERE courses.IID='$currentUserID' AND courses.course_name='$currentrow'";
+							$result=$conn->query($sql);
+							if ($result->num_rows > 0) {
+								// output data of each row
+								while($row = $result->fetch_assoc()) {
+									echo "<li>Project: " . $row["project_name"]. "</li>";
+								}
+							} else{
+								echo "0 projects with syllabus<br>";
+							}
+							echo '<br>';
+						}
+					}else {
+						echo "0 courses";
+					}
+					
+				?>
+				<div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#assign">
+					<div class="card bg-primary text-white">
+						<div class="card-body">Add a syllabus for a course!</div>
+					</div>
+				</div>
             </div>
 			
 			
@@ -50,7 +78,7 @@ if($currentUserType!=1){
 			<!--SIDE NAVBAR-->
             <div class="col-md-4">
                 <!-- A grey vertical navbar on the right side (1/5) -->
-                <nav class="navbar bg-white navbar-expand-md flex-md-column" style="height: 100%;">
+                <nav class="navbar navbar-expand-md flex-md-column" style="height: 100%; background-color: lightskyblue;">
                     <h1 style="color:black">
                         Instructor ProTrack
                     </h1>
@@ -60,11 +88,23 @@ if($currentUserType!=1){
                     <br>
                     <!-- Links -->
                     <ul class="navbar-nav flex-column" id="navbar">
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a class="nav-link" style="color:black" href="instructor_home.php">HOME</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" style="color:black" href="instructor_contact.php">CONTACT</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_students.php">STUDENTS</a>
+                        </li>
+						<li class="nav-item active">
+                            <a class="nav-link" style="color:black" href="instructor_syllabus.php">SYLLABUS</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_feedback.php">FEEDBACK</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_grades.php">GRADES</a>
                         </li>
                         <br>
                     </ul>

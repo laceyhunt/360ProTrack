@@ -3,8 +3,8 @@ require('../../Front/db.php');
 include("../../Front/auth_session.php");
 $servername = "localhost";
 $username = "root"; //$_SESSION['email'];
-$password = "";	//not sure what to put here
-$dbname = "protrack_db";
+$password = "root";	//not sure what to put here
+$dbname = "cs360protrack";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 $currentUser=$_SESSION['email'];
@@ -207,7 +207,7 @@ if($currentUserType!=1){
 			<!--SIDE NAVBAR-->
             <div class="col-md-4">
                 <!-- A grey vertical navbar on the right side (1/5) -->
-                <nav class="navbar bg-white navbar-expand-md flex-md-column" style="height: 100%;">
+                <nav class="navbar navbar-expand-md flex-md-column" style="height: 100%; background-color: lightskyblue;">
                     <h1 style="color:black">
                         Instructor ProTrack
                     </h1>
@@ -222,6 +222,18 @@ if($currentUserType!=1){
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" style="color:black" href="instructor_contact.php">CONTACT</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_students.php">STUDENTS</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_syllabus.php">SYLLABUS</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_feedback.php">FEEDBACK</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" style="color:black" href="instructor_grades.php">GRADES</a>
                         </li>
                         <br>
                     </ul>
