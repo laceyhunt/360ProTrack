@@ -4,8 +4,10 @@ include("../../Front/auth_session.php");
 // include 'update_project_name.php';
 $servername = "localhost";
 $username = "root"; //$_SESSION['email'];
-$password = "";	//not sure what to put here
-$dbname = "protrack_db";
+$password = "root";	//not sure what to put here
+//$password = "";	//not sure what to put here
+$dbname = "cs360protrack";
+//$dbname = "protrack_db";
 // Create connection and verify student
 $conn = new mysqli($servername, $username, $password, $dbname);
 $currentUser=$_SESSION['email'];
@@ -91,15 +93,15 @@ if($currentUserType!=0){
                                     // Send project name to the same PHP script using AJAX
                                     $.ajax({
                                         type: 'POST',
-                                        // url: 'update_project_name.php', // PHP script to handle updating the session variable
-                                        url: sendUrl,
+                                         url: 'update_project_name.php', // PHP script to handle updating the session variable
+//                                        url: sendUrl,
                                         data: { projectName: projectName },
                                         success: function(response) {
                                             console.log('Project Name Updated:', projectName);
                                             // Optionally, you can reload the page or update the UI here
 
-                                            document.cookie="projectName="+$projectName;
-                                            console.log(document.cookie);
+//                                            document.cookie="projectName="+$projectName;
+//                                            console.log(document.cookie);
 
                                             $('#projectName').text(projectName);
                                         },
@@ -184,14 +186,14 @@ if($currentUserType!=0){
                             <div class="modal-header">
                                 <?php
                                     // accept cookie from browser
-                                    $projectName=$_COOKIE['projectName'];
+//                                    $projectName=$_COOKIE['projectName'];
                                     // echo $_COOKIE['projectName'];
                                     // echo $projectName;
                                 ?>
-                                <h4 class="modal-title" ><?php echo $projectName; ?></h4>
+                                <h4 class="modal-title" ><?php // echo $projectName; ?></h4>
 
                                 <!-- <h4 class="modal-title">Project Title:&nbsp;</h4> -->
-                                <!-- <h4 class="modal-title" id="projectName">Title</h4> -->
+                                 <h4 class="modal-title" id="projectName">Title</h4> 
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <?php
