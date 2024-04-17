@@ -23,7 +23,7 @@
         $password = stripslashes($_REQUEST['password']);
         $password = mysqli_real_escape_string($con, $password);
 		$type = stripslashes($_REQUEST['usertype']);
-		$type = mysqli_real_escape_string($con, $type)
+		$type = mysqli_real_escape_string($con, $type);
         $query    = "INSERT into `users` (first_name,last_name, email, type, password)
                      VALUES ('$first_name','$last_name', '$email', $type, '" . md5($password) . "')";
         $result   = mysqli_query($con, $query);
