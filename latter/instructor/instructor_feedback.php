@@ -3,8 +3,10 @@ require('../../Front/db.php');
 include("../../Front/auth_session.php");
 $servername = "localhost";
 $username = "root"; //$_SESSION['email'];
-$password = "root"; //not sure what to put here
-$dbname = "cs360protrack";
+// $password = "root";	//not sure what to put here
+$password = "";	//not sure what to put here
+// $dbname = "cs360protrack";
+$dbname = "protrack_db";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 $currentUser = $_SESSION['email'];
@@ -118,7 +120,7 @@ if ($currentUserType != 1) {
 					<form class="form" action="" method="post">
 					<div class="row">
 						<div class='col-md-2'>Project Title: </div>
-						<div class='col-md-10'>BlogBase Database for Current Affairs</div>
+						<div class='col-md-10'>VideoGame</div>
 					</div>
 					<div class="row">
 						<div class='col-md-2'>Team Number: </div>

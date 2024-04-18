@@ -4,10 +4,10 @@ include("../../Front/auth_session.php");
 // include 'update_project_name.php';
 $servername = "localhost";
 $username = "root"; //$_SESSION['email'];
-$password = "root";	//not sure what to put here
-//$password = "";	//not sure what to put here
-$dbname = "cs360protrack";
-//$dbname = "protrack_db";
+// $password = "root";	//not sure what to put here
+$password = "";	//not sure what to put here
+// $dbname = "cs360protrack";
+$dbname = "protrack_db";
 // Create connection and verify student
 $conn = new mysqli($servername, $username, $password, $dbname);
 $currentUser=$_SESSION['email'];
@@ -243,7 +243,7 @@ if($currentUserType!=0){
                                     echo '<p class="text-success"> No student collaborators. </p>';
                                     }
                                 ?>
-								<a href="student_plan.html">View/Edit Project Plan</a><br>
+								<a href="student_plan.php">View/Edit Project Plan</a><br>
 								<a href="student_syllabus.html">View Syllabus</a><br>
 								<a href="student_feedback.php">View Instructor Feedback</a><br>
                             </div>
