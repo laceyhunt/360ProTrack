@@ -48,7 +48,12 @@ if($currentUserType!=1){
 							if ($result->num_rows > 0) {
 								// output data of each row
 								while($row = $result->fetch_assoc()) {
-									echo "<li>Project: " . $row["project_name"]. "</li>";
+									echo "<div class='row'><div class='col-md-4'>Project: " . $row["project_name"] . "</div>
+									<div class='container col-md-4' type='button' data-bs-toggle='modal' data-bs-target='#grades'>
+										<div class='card bg-primary text-white'>
+											<div class='card-body'>View grades!</div>
+										</div>
+									</div></div>";
 								}
 							} else{
 								echo "0 grades for projects<br>";
@@ -58,13 +63,7 @@ if($currentUserType!=1){
 					}else {
 						echo "0 courses";
 					}
-					
 				?>
-				<div class="container mt-3 col-md-4" type="button" data-bs-toggle="modal" data-bs-target="#assign">
-					<div class="card bg-primary text-white">
-						<div class="card-body">Add a syllabus for a course!</div>
-					</div>
-				</div>
             </div>
 			
 			
@@ -114,5 +113,47 @@ if($currentUserType!=1){
         </div>
     </div>
 </body>
+
+	<div class="modal" id="grades">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Grades:</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form class="form" action="" method="post">
+						<div class="row">
+							<div class='col-md-2'>ER Diagram: </div>
+							<div class='col-md-10'><textarea rows="1" cols="100" class="login-input" name="entry1" required />97%</textarea></div>
+						</div>
+						<div class="row">
+							<div class='col-md-2'>BCNF Model: </div>
+							<div class='col-md-10'><textarea rows="1" cols="100" class="login-input" name="entry2" required />84%</textarea></div>
+						</div>
+						<div class="row">
+							<div class='col-md-2'>Query 1: </div>
+							<div class='col-md-10'><textarea rows="1" cols="100" class="login-input" name="entry3" required />91%</textarea></div>
+						</div>
+						<div class="row">
+							<div class='col-md-2'>User Interface: </div>
+							<div class='col-md-10'><textarea rows="1" cols="100" class="login-input" name="entry4" required />87%</textarea></div>
+						</div>
+						<div class="row">
+							<div class='col-md-2'>Total: </div>
+							<div class='col-md-10'><textarea rows="1" cols="100" class="login-input" name="total"/>89%</textarea></div>
+						</div>
+						<input type="submit" name="submit_feedback" value="Submit Grade" class="login-button">
+					</form>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </html>
