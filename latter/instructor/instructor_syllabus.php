@@ -42,31 +42,39 @@ if ($currentUserType != 1) {
 					$c_sql = "SELECT * FROM courses WHERE courses.IID='$currentUserID'";
 					$c_result = $conn->query($c_sql);
 					if ($c_result->num_rows > 0) {
+						$class=[];
+						$index=0;
 						while ($c_row = $c_result->fetch_assoc()) {
 							echo "<h2>" . $c_row["course_name"] . "</h2><br>";
 							$currentrow = $c_row["course_name"];
+							$class[]=$c_row["CID"];
+//							echo $class[];
 							$sql = "SELECT * FROM projects JOIN courses ON courses.CID=projects.CID WHERE courses.IID='$currentUserID' AND courses.course_name='$currentrow'";
 							$result = $conn->query($sql);
 							if ($result->num_rows > 0) {
 								// output data of each row
 								while ($row = $result->fetch_assoc()) {
 									echo "<div class='row'><div class='col-md-4'>Project: " . $row["project_name"] . "</div>
-									<div class='container col-md-4' type='button' data-bs-toggle='modal' data-bs-target='#syllabus'>
+									<div value=$class[$index] class='container col-md-4' type='button' data-bs-toggle='modal' data-bs-target='#syllabus'>
 										<div class='card bg-primary text-white'>
-											<div class='card-body'>View syllabus!</div>
+											<div class='card-body'>View syllabus for course ID " . $class[$index] . "!</div>
 										</div>
 									</div></div>";
 								}
 							} else {
 								echo "0 projects with syllabus<br>";
 							}
+							$index++;
 							echo '<br>';
 						}
 					} else {
 						echo "0 courses";
 					}
+					foreach($class as $x=>$y){
+					echo "$x: $y <br>";
+					}
 					?>
-
+					
 				</div>
 				<!--SIDE NAVBAR-->
 				<div class="col-md-4">
@@ -77,6 +85,9 @@ if ($currentUserType != 1) {
 						</h1>
 						<p>
 							Welcome <?php echo $currentUser ?>
+						</p>
+						<p>
+							<a class="nav-link" style="color:black" href="../../Front/logout.php">Logout</a>
 						</p>
 						<br>
 						<!-- Links -->
@@ -121,6 +132,7 @@ if ($currentUserType != 1) {
 					<form class="form" action="" method="post">
 					<div class="row">
 						<div class='col-md-2'>Project Title: </div>
+						
 						<div class='col-md-10'><textarea rows="1" cols="100" class="login-input" name="title" required />VideoGame</textarea></div>
 					</div>
 					<div class="row">

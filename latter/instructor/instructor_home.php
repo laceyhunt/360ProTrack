@@ -161,7 +161,7 @@ if($currentUserType!=1){
 								<a href="instructor_grades.php">View/Edit Grades</a><br><br>
 								<?php
 									if (isset($_POST['remove_course'])){
-										$remove_courses_query = "DELETE FROM courses WHERE courses.IID='$currentUserID'";
+										$remove_courses_query = "DELETE FROM courses WHERE courses.IID='$currentUserID' AND courses.CID=''";
 										$remove_courses_result = $conn->query($remove_courses_query);
 										$remove_instructs_query = "DELETE FROM instructs WHERE instructs.IID='$currentUserID'";
 										$remove_instructs_result = $conn->query($remove_instructs_query);
@@ -215,6 +215,9 @@ if($currentUserType!=1){
                     </h1>
 					<p>
 						Welcome <?php echo $currentUser?>
+					</p>
+					<p>
+						<a class="nav-link" style="color:black" href="../../Front/logout.php">Logout</a>
 					</p>
                     <br>
                     <!-- Links -->
