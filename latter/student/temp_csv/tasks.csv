@@ -1,6 +1,4 @@
 TASK,DURATION,DEPENDENCIES
-a,5,NONE
-b,7,NONE
-c,8,a b
-d,9,c
-e,10,d
+a,4,NONE
+b,7,a
+c,8,b

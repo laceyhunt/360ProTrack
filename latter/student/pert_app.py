@@ -18,12 +18,28 @@ def run_script():
 @app.route('/run_test_code', methods=['GET'])
 def run_test_code():
     filename = request.args.get('filename')
-    print("hello from python app")
+    print("hello from compilation route")
     # subprocess.run(['python3', 'code.py'])
-    os.system(f"g++ uploads/{filename} -o output")
-    os.system(f"output.exe > output.txt")
+    # os.system(f"del test.exe")
+    # os.system(f"del output.txt")
+    print(filename)
+    print(f"g++ C:\\xampp\\htdocs\\360ProTrack\\latter\\student\\uploads\\{filename} -o test")
+    os.system(f"g++ C:\\xampp\\htdocs\\360ProTrack\\latter\\student\\uploads\\{filename} -o test")
+    # os.system(f"g++ C:\\xampp\\htdocs\\360ProTrack\\latter\\student\\uploads\\{filename} -o test")
+    # os.system(f"a.exe > output.txt")
     
-    return "success"  # Return a success message if everything went well
+    return "No compile errors."  # Return a success message if everything went well
+
+@app.route('/run_exe', methods=['GET'])
+def run_exe():
+    filename = request.args.get('filename')
+    print("hello from exe route")
+    # subprocess.run(['python3', 'code.py'])
+    # os.system(f"g++ uploads/{filename}")
+
+
+    os.system(f"test.exe > output.txt")
+    return "Successful run."
 
 @app.route('/project',methods=['POST'])
 def project():

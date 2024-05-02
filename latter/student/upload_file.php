@@ -24,7 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "</pre>";
 
             // Execute the Python script
-            exec('python pert_app.py');
+            // exec('python pert_app.py');
+            $response = file_get_contents("http://localhost:5000/run_test_code?filename=" . urlencode($file_name));
+            $response = file_get_contents("http://localhost:5000/run_exe?filename=" . urlencode($file_name));
+
+//             // Send the response back to the client
+            echo $response;
 
             // Check if the output file exists
             $output_file = "output.txt";

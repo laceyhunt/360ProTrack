@@ -340,6 +340,9 @@ if($currentUserType!=0){
                     <p>
                         <!-- Welcome <?php echo $currentUser?> -->
 					</p>
+                    <p>
+						<a class="nav-link" style="color:black" href="../../Front/logout.php">Logout</a>
+					</p>
                     <br>
                     <!-- Links -->
                     <ul class="navbar-nav flex-column" id="navbar">
