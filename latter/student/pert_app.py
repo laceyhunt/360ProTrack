@@ -1,7 +1,8 @@
-from flask import Flask, render_template  #, request, send_file
+from flask import Flask, render_template, request  #, request, send_file
 from flask_cors import CORS
 import subprocess
 import sqlite3
+import os
 
 app = Flask(__name__)
 CORS(app)  # Add this line to enable CORS for all routes
@@ -13,6 +14,16 @@ def run_script():
     subprocess.run(['python3', 'pert.py'])
     # Optionally, you can send a response back to the web page
     return 'Script executed successfully'
+
+@app.route('/run_test_code', methods=['GET'])
+def run_test_code():
+    filename = request.args.get('filename')
+    print("hello from python app")
+    # subprocess.run(['python3', 'code.py'])
+    os.system(f"g++ uploads/{filename} -o output")
+    os.system(f"output.exe > output.txt")
+    
+    return "success"  # Return a success message if everything went well
 
 @app.route('/project',methods=['POST'])
 def project():

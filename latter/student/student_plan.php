@@ -139,6 +139,52 @@ if($currentUserType!=0){
                     </table>
                 </div>
 
+                <!-- <div class="grey-box">
+                    <h4>Code Submission</h4>
+                    <form action="upload_file.php" method="post" enctype="multipart/form-data">
+                    <input type="file" id="myFile" name="filename">
+                    <input type="submit" value="Upload File">
+                    </form>
+                </div> -->
+                <div class="grey-box">
+                    <h4>Code Submission</h4>
+                    <form id="uploadForm" action="upload_file.php" method="post" enctype="multipart/form-data">
+                        <input type="file" id="myFile" name="filename" accept=".cpp">
+                        <input type="submit" value="Compile and Run">
+                    </form>
+                    <div id="message" style="color: green; display:none;"></div>
+                    <div id="output" style="color: black; display:none;"></div>
+                </div>
+
+                <script>
+                document.getElementById("uploadForm").addEventListener("submit", function(event) {
+                    event.preventDefault(); // Prevent the form from submitting normally
+                    
+                    var formData = new FormData(this);
+                    
+                    fetch('upload_file.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        if (result === "success") {
+                            document.getElementById("message").innerHTML = "File uploaded successfully.";
+                            // messageElement.style.color = "green"; // Set text color to green
+                            document.getElementById("message").style.display = "block";
+                        } else {
+                            document.getElementById("message").innerHTML = result;
+                            // messageElement.style.color = "red"; // Set text color to red
+                            document.getElementById("message").style.display = "block";
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+                </script>
+
+
                 <div class="grey-box">
                     <h4>Deliverables</h4>
                 
