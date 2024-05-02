@@ -3,6 +3,8 @@ Current apps:
 
 `@app.route('/run_script', methods=['POST'])`
 
+`@app.route('/run_test_code', methods=['GET'])`
+
 `@app.route('/project',methods=['POST'])`
 
 
